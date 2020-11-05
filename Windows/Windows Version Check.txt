@@ -1,0 +1,19 @@
+Using CDM
+
+> systeminfo
+
+--> Displays all specs of software hardware
+
+*******
+
+using run command
+
+open run by using WIN+R
+
+type WINVER
+
+enter
+
+*************
+
+By using control pannel and windows setting GUI Based 

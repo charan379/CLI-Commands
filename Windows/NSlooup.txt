@@ -1,0 +1,32 @@
+Microsoft Windows includes a tool called NSLOOKUP that you can use via the command prompt.
+This tool can be used to check DNS records propagation and resolution using different servers, 
+and perform other troubleshooting steps.
+
+1. Type nslookup and hit Enter. The default server will be your local DNS server. 
+You can specify the DNS server, type of record and a domain name. 
+The command below returns the A record for the domain you run a query for.
+
+> nslookup
+
+2. Type
+ 
+> nslookup -q=XX 
+
+where XX is a type of a DNS record.  
+Some of the available types are MX, A, CNAME, and TXT. 
+The records are then displayed, to exit the tool type exit
+
+
+
+To use nslookup as a troubleshooting tool, 
+you can set the specific type of record to lookup for a domain by using the 
+-type=record_type where record_type is A, CNAME, MX, PTR, NS, ANY.
+
+3. Type 
+
+> nslookup -type=ns domain_name 
+
+where domain_name is the domain for your query and hit Enter 
+Now the tool will display the name servers for the domain you specified.
+
+> nslookup domian_name Dns_server

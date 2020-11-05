@@ -1,0 +1,33 @@
+We can connect Systems in Lan by Using Physical Network(Lan Cables)
+Or by Wireless network (Wifi/Wlan)
+
+Type 1 : Wireless Network
+To connect two laptops in Local Area Network using Wlan(Wifi)
+
+Method 1 : By using CLI Commands
+
+On Pc you want to share files from
+* Open Command Promt with admin privilages
+  type following commands 
+ 
+ > netsh wlan set hostednetwork mode={allow or disallow} ssid={Network Name} key={Network password}
+ > netsh wlan start hostednetwork
+
+* Share Files/Folders
+
+Note : Don't use {}  
+
+On PC You want to recive files
+
+* Connect to above created Nework 
+* Go To Networks in your Filemanager 
+
+******************************************************************************************
+Some Usefull Netsh Commands
+
+> netsh wlan show hostednetwork setting=security
+> netsh wlan show hostednetwork security 
+> Netsh wlan set hostednetwork key=new_password
+> Netsh wlan set hostednetwork ssid=new_ssid
+
+

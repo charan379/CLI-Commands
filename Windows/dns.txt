@@ -1,0 +1,65 @@
+To See DNS
+
+> ipconfig /displaydns
+
+Flush DNS
+
+> ipconfig /flushdns
+
+
+
+Configure IP Address and DNS from Command Line
+Posted in Windows 10, Windows 7, Windows Vista, Windows Server by Steve Sinchak
+
+Would you like to configure the IP address and DNS settings of your Windows PC just using the command prompt?  Rather than click through the user interface, these items can quickly be set with just a few commands. 
+
+The first thing you need to identify is the name of the network interface you want to modify.  You can find the names of all network interfaces by running the following command:
+
+> netsh interface ipv4 show interfaces
+
+This will list all the interfaces available.  In most cases, your wired network adapter will be called "Local Area Connection" but it may include a number at the end of the name.  It is important to use the full name in the commands below and surround it with quotes if the name contains spaces.   
+
+How to set a static IP address
+
+A static IP address can be set from the command prompt by running the netsh command at an administrative level prompt.  Make sure to substitute the parameters in the command below for your environment. 
+
+> netsh interface ip set address name="Local Area Connection" static 123.123.123.123 255.255.255.0 123.123.123.1 1
+
+********
+"Local Area Connection" is the name of the adapter you want to modify.
+
+"123.123.123.123" is the IP address you want to set. 
+
+"255.255.255.0" is the subnet mask.
+
+"123.123.123.1" is the gateway.
+
+The "1" on the end of the command is the gateway metric. You will want to leave this as 1 for almost all cases. 
+
+How to enable DHCP instead of a static IP
+
+If you want to enable DHCP you can run:
+
+> netsh interface ip set address name="Local Area Connection" dhcp
+
+As mentioned above replace "Local Area Connection" with the name of the network adapter you want to modify.  
+
+How to Set Specific DNS Servers
+
+There are two commands for DNS since administrators typically configure a primary and secondary DNS server. 
+
+For the primary DNS server run:
+
+> netsh interface ip set dns name="Local Area Connection" static 208.67.222.222
+
+For the secondary DNS server run:
+
+> netsh interface ip add dns name="Local Area Connection" 208.67.220.220 index=2
+
+How to configure the network adapter to use the DNS servers provided by DHCP:
+
+If you PC is already configured to use DHCP want to configure the adapter to use DNS from DHCP as well run the following command. 
+
+> netsh interface ip set dnsservers name="Local Area Connection" source=dhcp
+
+When you are finished with all of your IP and DNS changes run ipconfig -all to review the new settings.
