@@ -1,0 +1,145 @@
+A Virtual Host is an Apache configuration directive that allows you to run more than one website on a single server. With Virtual Hosts, you can specify the site document root (the directory containing the website files), create a separate security policy for each site, use different SSL certificates, and much more.
+
+This article describes how to set up Apache Virtual Hosts on Ubuntu 20.04.
+Prerequisites
+Ensure that you have met the following requirements before continuing with the guide:
+One or more domain names pointing to your public server IP.
+Apache installed on your Ubuntu system.
+You are logged in as root or user with sudo privileges .
+Creating the Directory Structure
+The document root is the directory where the website files for a domain name are stored and served in response to requests. You can set the document root to any location you want, in this example, we will use the following directory structure:
+
+/var/www/
+├── domain1.com
+│   └── public_html
+├── domain2.com
+│   └── public_html
+Copy
+Each domain hosted on the server will have its document root set to /var/www/<domain_name>/public_html.
+
+Start by creating the root directory for the domain:
+sudo mkdir -p /var/www/domain1.com/public_html
+Copy
+We’ll also create an index.html file inside the domain document root directory that will be shown when you visit the domain in your browser:
+/var/www/domain1.com/public_html/index.html
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Welcome to domain1.com</title>
+  </head>
+  <body>
+    <h1>Success! domain1.com home page!</h1>
+  </body>
+</html>
+Copy
+Since the commands above are executed as a sudo user, the newly created files and directories are owned by root. To avoid any permission issues change the ownership of the domain document root directory and all files within the directory to the apache user (www-data) :
+
+sudo chown -R www-data: /var/www/domain1.com
+
+Creating a Virtual Hosts
+On Ubuntu systems, Apache Virtual Hosts configuration files are located in /etc/apache2/sites-available directory. They can be enabled by creating symbolic links to the /etc/apache2/sites-enabled directory, which Apache read during the startup.
+
+Open your text editor of choice and create the following basic Virtual Host configuration file:
+
+/etc/apache2/sites-available/domain1.com.conf
+<VirtualHost *:80>
+    ServerName domain1.com
+    ServerAlias www.domain1.com
+    ServerAdmin webmaster@domain1.com
+    DocumentRoot /var/www/domain1.com/public_html
+
+    <Directory /var/www/domain1.com/public_html>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/domain1.com-error.log
+    CustomLog ${APACHE_LOG_DIR}/domain1.com-access.log combined
+</VirtualHost>
+
+ServerName: The domain that should match for this virtual host configuration. This should be your domain name.
+ServerAlias: All other domains or subdomains that should match for this virtual host such as the www subdomain.
+DocumentRoot: The directory from which Apache will serve the domain files.
+Options: This directive controls which server features are available in a specific directory.
+-Indexes: Prevents directory listings.
+FollowSymLinks: When this option is enabled, Apache will follow the symbolic links.
+AllowOverride: Specifies which directives declared in the .htaccess file can override the configuration directives.
+ErrorLog, CustomLog: Specifies the location for log files.
+You can name the configuration file as you like, but the best practice is to use the domain name as the name of the virtual host configuration file.
+
+To enable the new virtual host file, use the a2ensite helper script which creates a symbolic link from the virtual host file to the sites-enabled directory:
+sudo a2ensite domain1.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The other option is to manually create a symlink as shown below:
+
+sudo ln -s /etc/apache2/sites-available/domain1.com.conf /etc/apache2/sites-enabled/
+Copy
+Once done, test the configuration for any syntax errors with:
+
+sudo apachectl configtest
+Copy
+If there are no errors, you will see the following output:
+
+Syntax OK
+Copy
+Restart the Apache service for the changes to take effect:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+example : 
+
+<VirtualHost *:80>
+    ServerName admin.charantej.xyz
+    ServerAlias admin.charantej.xyz
+    ServerAdmin webmaster@domain1.com
+    DocumentRoot /var/www/subdotest
+
+    <Directory /var/www/subdotest>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/subdotest-error.log
+    CustomLog ${APACHE_LOG_DIR}/subdotest-access.log combined
+</VirtualHost>
+
