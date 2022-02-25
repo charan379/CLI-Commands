@@ -69,6 +69,9 @@ ErrorLog, CustomLog: Specifies the location for log files.
 You can name the configuration file as you like, but the best practice is to use the domain name as the name of the virtual host configuration file.
 
 To enable the new virtual host file, use the a2ensite helper script which creates a symbolic link from the virtual host file to the sites-enabled directory:
+
+sudo a2dissite 000-default.conf
+
 sudo a2ensite domain1.com
 
 
